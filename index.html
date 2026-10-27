@@ -1,1 +1,113 @@
-
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0b0713">
+<title>AFK DARKNESS: 深淵の旅</title>
+<style>
+:root{--bg:#0b0713;--panel:#191126;--line:#49335e;--purple:#b276ff;--gold:#ffd76d;--red:#ff547a;--text:#f8f1ff;--muted:#b8a9ca}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,#2a1740 0,#100a1b 45%,#08060e 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button{font:inherit;color:var(--text);border:1px solid #62457d;border-radius:13px;background:linear-gradient(#44265d,#251532);padding:12px;box-shadow:0 3px 0 #0a0610;touch-action:manipulation}button:active{transform:translateY(2px);box-shadow:0 1px 0 #0a0610}button:disabled{opacity:.4}
+.app{max-width:760px;margin:auto;padding:15px 13px 30px}.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.logo{font-weight:950;letter-spacing:1.6px;font-size:23px}.logo span{color:var(--purple)}.sub{font-size:11px;color:var(--muted);margin-top:3px}.panel{margin-top:13px;border:1px solid var(--line);border-radius:19px;padding:13px;background:linear-gradient(150deg,#241633ee,#130d20f5);box-shadow:0 12px 30px #0005}.panel h2{font-size:15px;margin:0 0 10px;color:#e7d5ff}
+.scene{position:relative;overflow:hidden;border:1px solid #654681;border-radius:15px;background:linear-gradient(#100b20 0%,#29173c 70%,#171021 100%);height:285px}
+.skyglow{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,#a747ff20,transparent 55%);pointer-events:none}
+.moon{position:absolute;right:13%;top:15px;width:37px;height:37px;border-radius:50%;background:#e6d7ff;box-shadow:0 0 25px #cba6ff88}
+.stars{position:absolute;inset:0;background-image:radial-gradient(#fff 1px,transparent 1.5px),radial-gradient(#d4a7ff 1px,transparent 1.5px);background-size:59px 61px,91px 83px;background-position:10px 12px,35px 21px;opacity:.35}
+.path{position:absolute;bottom:48px;left:0;right:0;height:65px;background:linear-gradient(180deg,#372349,#21152c);border-top:2px solid #694580}
+.path:after{content:"";position:absolute;top:12px;left:0;right:0;height:2px;background:#b98bff30;box-shadow:0 22px #b98bff16}
+.rock{position:absolute;bottom:62px;font-size:25px;opacity:.7}.rock.a{left:12%}.rock.b{right:8%}.hud{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;z-index:4}.pill{background:#0b071dcc;border:1px solid #58416d;border-radius:10px;padding:6px 9px;font-size:11px}.pill b{color:var(--gold)}
+.actor{position:absolute;z-index:3;bottom:91px;left:12%;width:56px;height:80px;display:flex;align-items:center;justify-content:center;font-size:49px;filter:drop-shadow(0 5px 4px #0009);transition:left .4s ease;transform-origin:bottom center}.actor.walk{animation:walk .38s infinite alternate}.actor.swing{animation:swing .32s ease}.actor.hurt{animation:hurt .3s ease}
+.enemy{position:absolute;z-index:3;bottom:91px;left:72%;width:58px;height:75px;display:flex;align-items:center;justify-content:center;font-size:48px;filter:drop-shadow(0 5px 4px #0009);transition:left .35s,opacity .35s,transform .35s}.enemy.hit{animation:enemyHit .35s}.enemy.fall{animation:fall .45s forwards}
+.coin{position:absolute;z-index:5;font-size:22px;opacity:0;pointer-events:none;filter:drop-shadow(0 0 6px #ffd76d)}.coin.fly{animation:coinfly .8s ease-out forwards}
+.damage{position:absolute;z-index:6;left:70%;bottom:180px;color:#ffe58b;font-size:23px;font-weight:1000;text-shadow:0 2px 4px #000;opacity:0;pointer-events:none}.damage.pop{animation:damage .55s ease-out}
+.slash{position:absolute;z-index:6;left:62%;bottom:125px;font-size:42px;color:white;text-shadow:0 0 12px #e9c9ff,0 0 20px #b276ff;opacity:0;transform:rotate(-25deg) scale(.3);pointer-events:none}.slash.pop{animation:slash .35s ease-out}
+.drop{position:absolute;bottom:54px;left:0;right:0;text-align:center;color:#ffdf86;font-size:12px;font-weight:800;opacity:0;z-index:6}.drop.show{animation:drop .9s ease-out}
+.caption{position:absolute;z-index:8;left:9px;right:9px;bottom:8px;min-height:28px;border-radius:8px;padding:6px 8px;text-align:center;font-size:12px;background:#0b071dcc;color:#eadcff;border:1px solid #4b355e}
+.bars{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.barbox{background:#100b19;border:1px solid #49335e;border-radius:12px;padding:9px}.barhead{display:flex;justify-content:space-between;font-size:11px;gap:6px}.bar{height:9px;border-radius:99px;background:#08060c;overflow:hidden;margin-top:6px}.fill{height:100%;width:100%;background:linear-gradient(90deg,#8054ff,#c38bff);transition:width .2s}.fill.red{background:linear-gradient(90deg,#ff416e,#ff927f)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.stat{background:#100b19;border:1px solid #49335e;border-radius:12px;padding:9px}.stat small{font-size:10px;color:var(--muted)}.stat b{display:block;font-size:18px;margin-top:3px}
+.upgrades{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.upgrades button{text-align:left;font-size:13px;min-height:54px}.upgrades small{display:block;color:#cbb9df;font-size:10px;margin-top:3px}
+.log{margin-top:9px;padding:10px;background:#0c0813;border-radius:11px;min-height:50px;color:#cfc0df;font-size:11px;line-height:1.6}.controls{display:flex;gap:8px;margin-top:9px}.controls button{flex:1;font-size:12px}.save{background:#2d1b3b}
+@keyframes walk{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-5px) rotate(3deg)}}@keyframes swing{0%{transform:translateX(0) rotate(0) scale(1)}45%{transform:translateX(14px) rotate(18deg) scale(1.15)}100%{transform:translateX(0) rotate(0) scale(1)}}@keyframes enemyHit{0%,100%{filter:brightness(1);transform:translateX(0)}25%{filter:brightness(3) drop-shadow(0 0 14px #ff4d72);transform:translateX(10px)}60%{filter:brightness(2);transform:translateX(-7px)}}@keyframes fall{0%{opacity:1;transform:rotate(0) scale(1)}70%{opacity:.7;transform:rotate(40deg) scale(1.1)}100%{opacity:0;transform:translateY(20px) rotate(90deg) scale(.2)}}@keyframes slash{0%{opacity:0;transform:rotate(-40deg) scale(.2)}25%{opacity:1;transform:rotate(5deg) scale(1.25)}100%{opacity:0;transform:rotate(25deg) scale(1.5)}}@keyframes damage{0%{opacity:0;transform:translateY(8px) scale(.6)}25%{opacity:1;transform:translateY(-8px) scale(1.2)}100%{opacity:0;transform:translateY(-35px)}}@keyframes coinfly{0%{opacity:0;transform:translate(0,0) scale(.5)}20%{opacity:1;transform:translate(0,-15px) scale(1.1)}100%{opacity:0;transform:translate(-95px,-90px) scale(.7)}}@keyframes drop{0%{opacity:0;transform:scale(.8)}20%,65%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(-10px)}}
+@media(min-width:560px){.scene{height:330px}.actor,.enemy{bottom:105px}.actor{font-size:57px}.enemy{font-size:55px}.caption{font-size:13px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div><div class="logo">AFK <span>DARKNESS</span></div><div class="sub">深淵を歩く勇者 — WALK, FIGHT & COLLECT</div></div><button class="save" id="save">💾 セーブ</button></header>
+<section class="panel">
+<h2>🌒 深淵の道 — 自動冒険中</h2>
+<div class="scene" id="scene">
+<div class="skyglow"></div><div class="stars"></div><div class="moon"></div><div class="rock a">🪨</div><div class="rock b">🌿</div><div class="path"></div>
+<div class="hud"><div class="pill">階層 <b id="floor">1</b></div><div class="pill">討伐 <b id="kills">0</b></div></div>
+<div class="actor walk" id="actor">🧙</div><div class="enemy" id="enemy">👹</div><div class="slash" id="slash">⚔️</div><div class="damage" id="damage">-12</div><div class="drop" id="drop">✨ ENEMY DEFEATED!</div><div class="caption" id="caption">勇者が深淵を進んでいる……</div>
+</div>
+<div class="bars">
+ <div class="barbox"><div class="barhead"><b>🧙 勇者 HP</b><span id="hpText">100 / 100</span></div><div class="bar"><div class="fill" id="hpBar"></div></div></div>
+ <div class="barbox"><div class="barhead"><b id="enemyLabel">👹 深淵の餓鬼</b><span id="enemyHpText">30 / 30</span></div><div class="bar"><div class="fill red" id="enemyBar"></div></div></div>
+</div>
+<div class="stats"><div class="stat"><small>🪙 コイン</small><b id="gold">0</b></div><div class="stat"><small>🔮 残響</small><b id="echo">0</b></div><div class="stat"><small>✨ レベル</small><b id="level">1</b></div></div>
+<div class="upgrades">
+<button id="atk">⚔️ 剣を強化<small id="atkCost">10 コイン</small></button>
+<button id="hp">❤️ HP強化<small id="hpCost">12 コイン</small></button>
+<button id="magic">✨ 魔法を強化<small id="magicCost">15 コイン</small></button>
+<button id="rebirth">💀 死に戻り<small>残響5で永久強化</small></button>
+</div>
+<div class="controls"><button id="manualAttack">⚔️ 攻撃！</button><button id="speed">⏩ 倍速 ×1</button></div><div class="controls"><button id="pause">⏸ 一時停止</button><button id="reset">↻ 最初から</button></div>
+<div class="log" id="log">冒険開始！ 勇者は歩き、敵を探している。</div>
+</section>
+</div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const base={gold:0,echo:0,level:1,floor:1,kills:0,atk:12,maxHp:100,hp:100,magic:1,enemyHp:30,enemyMax:30};
+let s={...base};try{const x=JSON.parse(localStorage.getItem('afd-walk-v2')||'null');if(x)s={...s,...x}}catch(e){}
+let paused=false,mode='walk',lastAction=Date.now(),timer=null,enemyIdx=0,speed=1;
+const mobs=[{name:'深淵の餓鬼',face:'👹',hp:30},{name:'腐敗した狼',face:'🐺',hp:48},{name:'奈落の亡霊',face:'👻',hp:68},{name:'呪われた騎士',face:'💀',hp:95},{name:'深淵の王',face:'👿',hp:145}];
+function say(t){$('caption').textContent=t;$('log').textContent=t}
+function anim(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),850)}
+function update(){
+$('floor').textContent=s.floor;$('kills').textContent=s.kills;$('gold').textContent=Math.floor(s.gold);$('echo').textContent=s.echo;$('level').textContent=s.level;
+$('hpText').textContent=Math.ceil(s.hp)+' / '+s.maxHp;$('hpBar').style.width=Math.max(0,s.hp/s.maxHp*100)+'%';
+$('enemyHpText').textContent=Math.ceil(s.enemyHp)+' / '+s.enemyMax;$('enemyBar').style.width=Math.max(0,s.enemyHp/s.enemyMax*100)+'%';
+$('atkCost').textContent=(10+Math.floor((s.atk-12)/4)*5)+' コイン';$('hpCost').textContent=(12+Math.floor((s.maxHp-100)/25)*5)+' コイン';$('magicCost').textContent=(15+(s.magic-1)*8)+' コイン';
+$('atk').disabled=s.gold<10+Math.floor((s.atk-12)/4)*5;$('hp').disabled=s.gold<12+Math.floor((s.maxHp-100)/25)*5;$('magic').disabled=s.gold<15+(s.magic-1)*8;$('rebirth').disabled=s.echo<5;
+}
+function wait(ms,fn){setTimeout(fn,ms/speed)}\nfunction enemyForFloor(){return mobs[Math.min(mobs.length-1,Math.floor((s.floor-1)/3))]}
+function walkToEnemy(){
+ mode='walk';$('actor').classList.add('walk');$('actor').style.left='43%';$('enemy').style.left='72%';$('enemy').style.opacity='1';$('enemy').classList.remove('fall');$('actor').textContent='🧙';say('🚶 勇者が敵に向かって歩いている……');
+ wait(650,()=>{if(paused)return;attack()});
+}
+function attack(){
+ mode='fight';$('actor').classList.remove('walk');$('actor').style.left='55%';$('actor').textContent='🧙‍♂️';anim($('actor'),'swing');anim($('enemy'),'hit');anim($('slash'),'pop');
+ const dmg=s.atk+Math.floor(Math.random()*4)+(s.magic>1?Math.floor(s.magic*1.4):0);
+ s.enemyHp=Math.max(0,s.enemyHp-dmg);$('damage').textContent='-'+dmg;anim($('damage'),'pop');
+ say('⚔️ 勇者の攻撃！ '+dmg+' ダメージ！');update();
+ if(s.enemyHp<=0){wait(430,defeat)}else{wait(570,()=>{if(paused)return;enemyAttack()})}
+}
+function enemyAttack(){
+ if(paused)return;const d=Math.max(2,Math.floor(2+s.floor*.65));s.hp=Math.max(0,s.hp-d);anim($('actor'),'hurt');say('💢 敵の反撃！ 勇者は'+d+'ダメージを受けた');update();
+ if(s.hp<=0){s.echo++;s.gold=Math.floor(s.gold*.7);s.hp=s.maxHp;s.floor=Math.max(1,s.floor-1);say('☠️ 勇者は倒れた……残響+1。死に戻り！');wait(900,()=>{resetEnemy();walkToEnemy()})}else wait(650,attack)
+}
+function defeat(){
+ $('actor').style.left='43%';$('enemy').classList.add('fall');s.kills++;s.gold+=5+Math.floor(s.floor*1.5);s.level=1+Math.floor(s.kills/3);if(s.kills%5===0)s.echo++;
+ $('drop').textContent='💥 撃破！ +'+(5+Math.floor(s.floor*1.5))+' 🪙';anim($('drop'),'show');say('💰 敵を倒した！ コインが勇者のもとへ！');
+ const coin=document.createElement('div');coin.className='coin';coin.textContent='🪙';coin.style.left='72%';coin.style.bottom='130px';$('scene').appendChild(coin);void coin.offsetWidth;coin.classList.add('fly');setTimeout(()=>coin.remove(),900);
+ update();wait(1000,()=>{s.floor++;resetEnemy();walkToEnemy()})
+}
+function resetEnemy(){const m=enemyForFloor();s.enemyMax=Math.round(m.hp+(s.floor-1)*4);s.enemyHp=s.enemyMax;$('enemy').textContent=m.face;$('enemyLabel').textContent=''+m.face+' '+m.name;$('enemy').classList.remove('fall');$('enemy').style.opacity='1';$('enemy').style.left='72%';update()}
+$('atk').onclick=()=>{const c=10+Math.floor((s.atk-12)/4)*5;if(s.gold>=c){s.gold-=c;s.atk+=4;say('⚔️ 剣を強化！ 攻撃力アップ');update()}};
+$('hp').onclick=()=>{const c=12+Math.floor((s.maxHp-100)/25)*5;if(s.gold>=c){s.gold-=c;s.maxHp+=25;s.hp+=25;say('❤️ 最大HPアップ！');update()}};
+$('magic').onclick=()=>{const c=15+(s.magic-1)*8;if(s.gold>=c){s.gold-=c;s.magic++;say('✨ 魔法強化！ 攻撃に魔力が加わる');update()}};
+$('rebirth').onclick=()=>{if(s.echo<5)return;if(confirm('転生する？ コインと階層をリセットして攻撃力+10。')){s.echo-=5;s.gold=0;s.floor=1;s.atk+=10;s.hp=s.maxHp;s.kills=0;resetEnemy();say('🌌 転生！ 永久攻撃力+10');update()}};
+$('manualAttack').onclick=()=>{if(paused){say('▶ まず再開してね');return}if(mode==='fight'){attack()}else{say('🚶 勇者が敵に近づいている！');walkToEnemy()}};
+$('speed').onclick=()=>{speed=speed===1?2:speed===2?3:1;$('speed').textContent='⏩ 倍速 ×'+speed;say(speed===1?'通常速度に戻した！':'冒険スピード '+speed+'倍！')};
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'▶ 再開':'⏸ 一時停止';if(paused){$('actor').classList.remove('walk');say('⏸ 冒険を一時停止中')}else{walkToEnemy()}};
+$('reset').onclick=()=>{if(confirm('進行状況をリセットする？')){s={...base};try{localStorage.removeItem('afd-walk-v2')}catch(e){}resetEnemy();walkToEnemy();say('新しい冒険を開始！')}};
+$('save').onclick=()=>{try{localStorage.setItem('afd-walk-v2',JSON.stringify(s));say('💾 セーブ完了！')}catch(e){say('このブラウザでは保存できませんでした') }};
+resetEnemy();update();setTimeout(walkToEnemy,450);
+setInterval(()=>{if(!paused&&mode==='walk'&&Date.now()-lastAction>4000)walkToEnemy()},1000);
+setInterval(()=>{if(!paused)try{localStorage.setItem('afd-walk-v2',JSON.stringify(s))}catch(e){}},15000);
+})();
+</script>
+</body></html>
